@@ -44,6 +44,12 @@
         document.body.appendChild(pad);
     }
 
+    function isNumpadVisible() {
+        const el = document.getElementById(NUMPAD_ID);
+        if (!el) return false;
+        return !el.classList.contains("hidden");
+    }
+
     function showNumpad(input) {
         ensureNumpad();
         activeInput = input;
@@ -70,18 +76,16 @@
         if (el) el.textContent = activeInput?.value || "0";
     }
 
-    function onPadClick(e) {
-        const t = e.target;
-        if (!(t instanceof HTMLElement) || !activeInput) return;
+    function applyKeyAction({ key, action }) {
+        if (!activeInput) return;
 
-        const key = t.dataset.key;
-        const action = t.dataset.action;
         let v = activeInput.value || "";
-
-        // 入力モード（int/decimal）
         const mode = activeInput.getAttribute("data-numpad") || "decimal";
 
-        if (action === "close" || action === "ok") return hideNumpad();
+        if (action === "close" || action === "ok") {
+            hideNumpad();
+            return;
+        }
 
         if (action === "clear") {
             v = "";
@@ -92,46 +96,113 @@
             clearOnFirstInput = false;
         }
         else if (action === "dot") {
-            // ★ int では小数点は入れない
             if (mode === "int") {
                 updatePreview();
                 return;
             }
-
-            // ★ 最初の入力で . を押したら置き換え開始（他のキーと同じ挙動）
             if (clearOnFirstInput) {
                 v = "";
                 clearOnFirstInput = false;
             }
-
-            // ★ 2個目の . を絶対に入れない（MRRのクリア原因）
             if (v.includes(".")) {
                 updatePreview();
                 return;
             }
-
             v = v || "0";
             v += ".";
         }
         else if (action === "sign") {
-            if (clearOnFirstInput) {
-                // 符号反転を最初に押した場合も「入力開始」として扱う
-                clearOnFirstInput = false;
-            }
+            if (clearOnFirstInput) clearOnFirstInput = false;
             v = v.startsWith("-") ? v.slice(1) : "-" + v;
         }
-        else if (key) {
+        else if (key != null) {
             if (clearOnFirstInput) {
                 v = "";
                 clearOnFirstInput = false;
             }
             if (v === "0") v = "";
-            v += key;
+            v += String(key);
         }
 
         activeInput.value = v;
         activeInput.dispatchEvent(new Event("input", { bubbles: true }));
         updatePreview();
+    }
+
+    function onPadClick(e) {
+        const t = e.target;
+        if (!(t instanceof HTMLElement) || !activeInput) return;
+
+        const key = t.dataset.key;
+        const action = t.dataset.action;
+
+        if (key != null && key !== "") {
+            applyKeyAction({ key, action: null });
+            return;
+        }
+        if (action) {
+            applyKeyAction({ key: null, action });
+        }
+    }
+
+    // --- PC keyboard support (when numpad is open) ---
+    function onKeyDown(e) {
+        // テンキーが開いている時だけ介入（既存ページのショートカット等を潰さない）
+        if (!activeInput || !isNumpadVisible()) return;
+
+        // IME変換中などは無視
+        if (e.isComposing) return;
+
+        const k = e.key;
+
+        // 数字（メインキー / テンキー）
+        if (k >= "0" && k <= "9") {
+            e.preventDefault();
+            applyKeyAction({ key: k, action: null });
+            return;
+        }
+
+        // 小数点：. と , を許可（日本語配列やテンキー環境差対策）
+        if (k === "." || k === ",") {
+            e.preventDefault();
+            applyKeyAction({ key: null, action: "dot" });
+            return;
+        }
+
+        // バックスペース
+        if (k === "Backspace") {
+            e.preventDefault();
+            applyKeyAction({ key: null, action: "bksp" });
+            return;
+        }
+
+        // Delete は「クリア」として扱う（好みがあれば変更可）
+        if (k === "Delete") {
+            e.preventDefault();
+            applyKeyAction({ key: null, action: "clear" });
+            return;
+        }
+
+        // Enter は OK
+        if (k === "Enter") {
+            e.preventDefault();
+            applyKeyAction({ key: null, action: "ok" });
+            return;
+        }
+
+        // Esc は閉じる
+        if (k === "Escape") {
+            e.preventDefault();
+            applyKeyAction({ key: null, action: "close" });
+            return;
+        }
+
+        // 符号：- を押したら ± と同じ扱い
+        if (k === "-") {
+            e.preventDefault();
+            applyKeyAction({ key: null, action: "sign" });
+            return;
+        }
     }
 
     // フォーカスが入った input のみでテンキーを開く
@@ -149,6 +220,9 @@
             input.focus();
         }
     });
+
+    // PCキーボード入力（テンキー含む）
+    document.addEventListener("keydown", onKeyDown);
 
     window.Numpad = { hide: hideNumpad };
 })();
