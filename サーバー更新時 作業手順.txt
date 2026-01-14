@@ -1,0 +1,111 @@
+加工条件 電卓
+サーバー更新時 作業手順
+対象
+
+サーバーPC：常時稼働 Windows PC（NSSM + Waitress）
+
+利用者：社内PC／Android／iPad など
+
+更新方法：GitHub からの取得
+
+目的
+
+開発PCで更新された内容を
+サーバーPCに安全・確実に反映すること
+
+前提条件（初回構築済み）
+
+Python（3.12.x）
+
+Git
+
+仮想環境（.venv）
+
+Waitress
+
+NSSM（Windowsサービス登録）
+
+サービス名：machining-condition-calculator
+
+更新時に行う作業（サーバーPC側）
+① サーバーPCにログイン
+
+管理者権限の PowerShell を使用する
+
+② プロジェクトフォルダへ移動
+cd C:\apps\machining-condition-calculator
+
+③ GitHub から最新コードを取得
+git pull
+
+確認ポイント
+
+Updating xxxx..yyyy などが表示されれば正常
+
+何も表示されない場合は差分なし（問題なし）
+
+④ （必要な場合のみ）ライブラリ更新
+
+requirements.txt が変更された場合のみ実施
+
+C:\apps\machining-condition-calculator\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+
+※ 通常のHTML / JS / Python修正では不要
+
+⑤ サービス再起動
+nssm restart machining-condition-calculator
+
+⑥ サービス状態確認
+nssm status machining-condition-calculator
+
+正常状態
+SERVICE_RUNNING
+
+⑦ 動作確認（最低限）
+
+ブラウザで以下にアクセス：
+
+http://192.168.0.102:8080/
+
+
+トップページが表示される
+
+追加・修正した計算ページが使える
+
+明らかなエラーが出ていない
+
+トラブル時の確認
+サービスが起動しない場合
+nssm status machining-condition-calculator
+
+手動起動でエラー確認
+C:\apps\machining-condition-calculator\.venv\Scripts\python.exe `
+ -m waitress --host=0.0.0.0 --port=8080 --call apps.main:create_app
+
+
+表示されるエラー内容を確認
+
+修正は 開発PC側で行う
+
+修正後、再度 GitHub → pull → restart
+
+やってはいけないこと（重要）
+
+サーバーPCでコード編集しない
+
+サーバーPCで git commit しない
+
+Python や仮想環境を勝手に更新しない
+
+実験的なコマンドを実行しない
+
+運用方針（要点）
+
+開発PC：実装・検証・GitHubへ push
+
+サーバーPC：pull → 再起動のみ
+
+サーバーPCは
+「考えない・作らない・触らない」
+＝ 壊れない
