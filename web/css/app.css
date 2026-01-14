@@ -522,3 +522,22 @@ input.numpad-active {
     /* “補助ツール感” */
     background: rgba(255, 255, 255, .03);
 }
+
+/* === group内レイアウトを揃える（ball_end_contact_diameter など） === */
+
+/* grid-group を内側も grid 化して gap 統一 */
+.grid-group {
+    display: grid;
+    gap: var(--gap);
+}
+
+/* group-title の margin と gap が二重になりやすいので整理 */
+.grid-group .group-title {
+    margin-bottom: 0;
+}
+
+/* label.field が縮まないよう、group内だけ幅を確保 */
+.grid-group .field {
+    display: block;
+    width: 100%;
+}

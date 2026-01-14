@@ -1,0 +1,96 @@
+<!--web/templates/calculators/chip_thinning.html-->
+
+{% extends "base.html" %}
+{% set title = "チップ薄化補正（fz補正）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>チップ薄化補正（fz補正）</h2>
+
+    <div class="grid">
+
+        <div class="grid-group">
+            <div class="group-title">入力（工具・切込み）</div>
+
+            <label class="field">
+                <span>工具径 D（mm）</span>
+                <input id="d_mm" value="10.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>ステップオーバー ae（mm）</span>
+                <input id="ae_mm" value="0.20" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>設定 1刃送り fz（mm/tooth）</span>
+                <input id="fz_mm" value="0.05" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+        <div class="grid-group hint">
+            <div class="group-title">目標（任意）</div>
+
+            <label class="field">
+                <span>目標 切りくず厚 h_target（mm）※未入力なら fz を使用</span>
+                <input id="h_target_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+        <div class="grid-group">
+            <div class="group-title">結果（薄化の見える化）</div>
+
+            <label class="field">
+                <span>噛み込み角 θ_eng（deg）</span>
+                <input id="theta_eng_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>評価角 θ_max（deg）</span>
+                <input id="theta_max_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>実効切りくず厚 h_eff（mm）</span>
+                <input id="h_eff_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>補正倍率 K（= 1 / sinθ_max）</span>
+                <input id="k_factor" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>補正後 fz（mm/tooth）</span>
+                <input id="fz_adj_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <button id="btn_calc" class="btn">計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        <strong>判断の目安（仕上げ時・一般的な超硬エンドミル）</strong><br>
+        実効切りくず厚 h_eff は、工具の刃先R・材質・コーティングにより最適値が変わります。<br>
+        以下はあくまで現場での判断目安です。<br><br>
+
+        ・h_eff &lt; 0.02 mm：擦り寄りになりやすい（面ムラ・発熱・摩耗に注意）<br>
+        ・0.02 ～ 0.05 mm：仕上げで安定しやすい帯（よく使われる領域）<br>
+        ・0.05 ～ 0.10 mm：負荷は上がるが、切削としては成立（剛性と相談）<br><br>
+
+        ※ 薄化が強く fz 補正量が大きい場合は、fz を無理に上げるよりも<br>
+        ステップオーバー ae を増やして補正倍率 K を下げる方が穏やかな場合があります。
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/chip_thinning.js"></script>
+<script src="/js/page_chip_thinning.js"></script>
+{% endblock %}

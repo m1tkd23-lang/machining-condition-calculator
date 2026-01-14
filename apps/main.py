@@ -60,6 +60,14 @@ def create_app() -> Flask:
     def calc_ball_end_contact_diameter():
         return render_template("calculators/ball_end_contact_diameter.html")
 
+    @app.get("/calc/chip-thinning")
+    def calc_chip_thinning():
+        return render_template("calculators/chip_thinning.html")
+
+
+    @app.get("/calc/edge-contact-length")
+    def calc_edge_contact_length():
+        return render_template("calculators/edge_contact_length.html")
 
 
 

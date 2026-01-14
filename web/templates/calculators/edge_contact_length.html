@@ -1,0 +1,111 @@
+<!--web/templates/calculators/edge_contact_length.html\-->
+
+{% extends "base.html" %}
+{% set title = "切れ刃接触長の変動（ap/ae・ねじれ）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>切れ刃接触長の変動（ap/ae・ねじれ）</h2>
+
+    <div class="grid">
+
+        <div class="grid-group">
+            <div class="group-title">入力（肩削り / ダウンカット / 右ねじれ固定）</div>
+
+            <label class="field">
+                <span>工具径 D（mm）</span>
+                <input id="d_mm" value="10.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>ラジアル切込み ae（mm）</span>
+                <input id="ae_mm" value="1.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>アキシャル切込み ap（mm）</span>
+                <input id="ap_mm" value="10.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>刃数 z（teeth）</span>
+                <input id="teeth" value="4" readonly data-numpad="int" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>ねじれ角 β（deg）</span>
+                <input id="helix_deg" value="35.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+        <div class="grid-group hint">
+            <div class="group-title">表示設定（計算精度 / 重くなる場合は下げる）</div>
+
+            <label class="field">
+                <span>表示回転数（revs）</span>
+                <input id="revs" value="4" readonly data-numpad="int" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>1回転あたりサンプル数（points/rev）</span>
+                <input id="points_per_rev" value="240" readonly data-numpad="int" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>ap方向サンプル数（z-samples）</span>
+                <input id="z_samples" value="200" readonly data-numpad="int" autocomplete="off">
+            </label>
+        </div>
+
+        <div class="grid-group">
+            <div class="group-title">結果（統計値）</div>
+
+            <label class="field">
+                <span>噛み込み角 θ_eng（deg）</span>
+                <input id="theta_eng_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>代表刃 接触刃長 L_tooth（min / max / avg）mm</span>
+                <input id="stats_tooth" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>全刃合計 接触刃長 L_total（min / max / avg）mm</span>
+                <input id="stats_total" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+        <div class="grid-group">
+            <div class="group-title">波形（上：代表刃 / 下：全刃合計）</div>
+
+            <canvas id="chart_tooth" width="900" height="220"
+                style="width:100%; height:220px; border:1px solid rgba(255,255,255,.12); border-radius:12px;"></canvas>
+
+            <canvas id="chart_total" width="900" height="220"
+                style="width:100%; height:220px; border:1px solid rgba(255,255,255,.12); border-radius:12px;"></canvas>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <button id="btn_calc" class="btn">計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        前提：一定 ae の肩削り / ダウンカット / 右ねじれ固定（最小プロトタイプ）<br>
+        噛み込み角：θ_eng = acos(1 − 2ae/D)<br>
+        噛み込み窓（ダウン）：[0, θ_eng]（位相基準はこの定義に固定）<br>
+        ねじれ：phi(z)=phi0 + k z, k = 2 tanβ / D（rad/mm）<br>
+        接触刃長は z 方向サンプリングで推定（z-samples を上げるほど滑らか）
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/edge_contact.js"></script>
+<script src="/js/page_edge_contact_length.js"></script>
+{% endblock %}

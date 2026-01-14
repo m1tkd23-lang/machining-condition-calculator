@@ -10,25 +10,30 @@
     <div class="grid">
 
         <!-- ===== 入力：工具・姿勢 ===== -->
-        <label class="field">
-            <span>ボール半径 R（mm）</span>
-            <input id="r_mm" value="5.00" readonly data-numpad="decimal" autocomplete="off">
-        </label>
+        <div class="grid-group">
+            <div class="group-title">入力（工具・姿勢）</div>
 
-        <label class="field">
-            <span>回転数 n（rpm）</span>
-            <input id="rpm" value="20000" readonly data-numpad="int" autocomplete="off">
-        </label>
+            <label class="field">
+                <span>ボール半径 R（mm）</span>
+                <input id="r_mm" value="5.00" readonly data-numpad="decimal" autocomplete="off">
+            </label>
 
-        <label class="field">
-            <span>リード角 lead（deg）</span>
-            <input id="lead_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
-        </label>
+            <label class="field">
+                <span>回転数 n（rpm）</span>
+                <input id="rpm" value="20000" readonly data-numpad="int" autocomplete="off">
+            </label>
 
-        <label class="field">
-            <span>チルト角 tilt（deg）</span>
-            <input id="tilt_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
-        </label>
+            <label class="field">
+                <span>リード角 lead（deg）</span>
+                <input id="lead_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>チルト角 tilt（deg）</span>
+                <input id="tilt_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
 
         <!-- ===== 計算結果：現在条件 ===== -->
         <div class="grid-group">

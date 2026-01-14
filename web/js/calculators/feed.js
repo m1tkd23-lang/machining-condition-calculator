@@ -1,3 +1,4 @@
+//web\js\calculators\feed.js
 // 送り計算（純粋関数）
 // vf = fz * z * n
 // fz = vf / (z * n)

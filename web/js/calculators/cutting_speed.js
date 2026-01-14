@@ -1,3 +1,4 @@
+//web\js\calculators\cutting_speed.js
 // 周速・回転数（純粋関数）
 // Vc = π * D * n / 1000
 // D: mm, Vc: m/min, n: rpm
