@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% set title = "円弧送り補正（内径/外形）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>円弧送り補正（内径/外形）</h2>
+
+    <div class="grid">
+        <!-- ===== 入力（円弧補正） ===== -->
+        <div class="grid-group">
+            <div class="group-title">入力（円弧補正）</div>
+
+            <label class="field">
+                <span>加工仕上げ径 D_work（mm）</span>
+                <input id="d_work_mm" value="50" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>工具径 D_tool（mm）</span>
+                <input id="d_tool_mm" value="10" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>加工種別（ダウンカット固定）</span>
+                <select id="mode">
+                    <option value="ID" selected>内径（ID）</option>
+                    <option value="OD">外形（OD）</option>
+                </select>
+            </label>
+
+            <!-- ★ タブを「回転数nの上」へ移動 -->
+            <div class="tabs" role="tablist" aria-label="テーブル送りの入力方式">
+                <button type="button" class="tab active" role="tab" aria-selected="true" id="tab_vf_direct"
+                    data-tab="vf_direct">
+                    テーブル送り vf を直接入力
+                </button>
+                <button type="button" class="tab" role="tab" aria-selected="false" id="tab_vf_from_vc"
+                    data-tab="vf_from_vc">
+                    D・Vc・z・fz から vf
+                </button>
+            </div>
+
+            <label class="field">
+                <span>回転数 n（rpm）</span>
+                <input id="rpm" value="10000" readonly data-numpad="int" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>刃数 z（teeth）</span>
+                <input id="teeth" value="4" readonly data-numpad="int" autocomplete="off">
+            </label>
+
+            <!-- Tab A: direct vf -->
+            <div class="panel" id="panel_vf_direct">
+                <label class="field">
+                    <span>テーブル送り vf_cmd（mm/min）</span>
+                    <input id="vf_cmd" value="2000" readonly data-numpad="int" autocomplete="off">
+                </label>
+
+                <label class="field">
+                    <span>参考：1刃送り fz_cmd（mm/tooth）</span>
+                    <input id="fz_cmd" value="" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+            </div>
+
+            <!-- Tab B: compute vf from D,Vc,z,fz -->
+            <div class="panel hidden" id="panel_vf_from_vc">
+                <!-- ★ 工具径入力は削除（上段の D_tool を使う） -->
+
+                <label class="field">
+                    <span>周速 Vc（m/min）</span>
+                    <input id="vc_mmin" value="200" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <label class="field">
+                    <span>1刃送り fz（mm/tooth）</span>
+                    <input id="fz_from_vc" value="0.05" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <div class="row" style="margin-top: 0;">
+                    <button id="btn_calc_vf_from_vc" class="btn btn-sub">D_tool・Vc・z・fz から vf を計算</button>
+                    <span class="mono" id="vf_from_vc_preview"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 結果（仕上げ径上） ===== -->
+        <div class="grid-group">
+            <div class="group-title">結果（仕上げ径上の差）</div>
+
+            <label class="field">
+                <span>工具中心軌跡径 D_path（mm）</span>
+                <input id="d_path_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>送り倍率 k（加工点 / 指令）</span>
+                <input id="k_arc" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>実テーブル相当 vf_surface（mm/min）</span>
+                <input id="vf_surface" value="" readonly data-numpad="int" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>実 1刃送り fz_surface（mm/tooth）</span>
+                <input id="fz_surface" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+
+
+        <!--=====オプション（ヘリカル 薄化）=====-->
+        <div class="grid-group hint">
+            <div class="group-title">オプション（ヘリカル角度 / 実効切りくず厚）</div>
+
+            <div class="grid-group" style="margin-top: 0;">
+                <div class="group-title">ヘリカル角度 α（参考）</div>
+
+                <label class="field">
+                    <span>Z切り込み量 dz（1周あたり mm/rev）</span>
+                    <input id="dz_per_rev_mm" value="0.5" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <label class="field">
+                    <span>ヘリカル角度 α（deg）</span>
+                    <input id="helix_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <label class="field">
+                    <span>目標 ヘリカル角度 α_target（deg）</span>
+                    <input id="helix_target_deg" value="2.0" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <div class="row" style="margin-top: 0;">
+                    <button id="btn_inv_helix" class="btn btn-sub">α_target から dz（1周）を逆算</button>
+                    <span class="mono" id="helix_inv_preview"></span>
+                </div>
+
+                <label class="field">
+                    <span>必要 dz_req（1周あたり mm/rev）</span>
+                    <input id="dz_req_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+            </div>
+
+            <div class="grid-group" style="margin-top: 10px;">
+                <div class="group-title">実効切りくず厚 h_eff（ae による薄化：簡易 / ダウンカット）</div>
+
+                <label class="field">
+                    <span>径方向切込み ae（mm）</span>
+                    <input id="ae_mm" value="0.5" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <label class="field">
+                    <span>最大切りくず厚 h_eff（mm）※簡易</span>
+                    <input id="h_eff_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <label class="field">
+                    <span>薄化倍率 k_thin（= fz_surface / h_eff）</span>
+                    <input id="k_thin" value="" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+
+                <label class="field">
+                    <span>最大厚み角 φ（deg）</span>
+                    <input id="phi_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc" class="btn">計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        内径：D_path = D_work − D_tool ／ 外形：D_path = D_work + D_tool<br>
+        k = D_work / D_path, vf_surface = vf_cmd × k, fz_surface = vf_surface / (z×n)<br>
+        （ヘリカル参考）α = atan(dz / (π×D_path))<br>
+        （薄化簡易）φ = arccos(1 − 2ae/D_tool), h_eff = fz_surface × sin(φ), k_thin = 1/sin(φ)
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/cutting_speed.js"></script>
+<script src="/js/calculators/feed.js"></script>
+<script src="/js/calculators/arc_feed_comp.js"></script>
+<script src="/js/page_arc_feed_comp.js"></script>
+{% endblock %}

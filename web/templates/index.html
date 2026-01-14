@@ -18,9 +18,14 @@
             <div class="menu-desc">vf（mm/min） / fz（mm/tooth） / z（刃数） / n（rpm）</div>
         </a>
 
-        <a class="menu-item" href="/calc/cutting-time">
-            <div class="menu-title">切削時間</div>
-            <div class="menu-desc">距離L（mm） / 送りvf（mm/min） → 時間</div>
+        <a class="menu-item" href="/calc/arc-feed-comp">
+            <div class="menu-title">円弧送り補正（内径/外形）</div>
+            <div class="menu-desc">指令vf ⇔ 仕上げ径上の実vf / fz（＋薄化h_effはオプション）</div>
+        </a>
+
+        <a class="menu-item" href="/calc/mrr">
+            <div class="menu-title">除去量（MRR / Q）</div>
+            <div class="menu-desc">ap・ae・vf → Q（mm³/min, cm³/min）</div>
         </a>
 
         <a class="menu-item" href="/calc/surface-roughness">
@@ -28,10 +33,6 @@
             <div class="menu-desc">R（mm）/ f（mm/rev） ↔ h（µm）</div>
         </a>
 
-        <a class="menu-item" href="/calc/mrr">
-            <div class="menu-title">除去量（MRR / Q）</div>
-            <div class="menu-desc">ap・ae・vf → Q（mm³/min, cm³/min）</div>
-        </a>
 
         <a class="menu-item" href="/calc/drill-point-height">
             <div class="menu-title">ドリル肩高さ（直径・先端角）</div>
@@ -49,10 +50,7 @@
         </a>
 
 
-        <a class="menu-item" href="/calc/edge-contact-length">
-            <div class="menu-title">切れ刃接触長の変動（ap/ae・ねじれ）</div>
-            <div class="menu-desc">D・ae・ap・z・β → 接触刃長の波形（代表刃 / 全刃合計）</div>
-        </a>
+
 
         <a class="menu-item" href="/calc/chip-thinning">
             <div class="menu-title">チップ薄化補正（fz補正）</div>
@@ -64,6 +62,18 @@
             <div class="menu-title">剛性倍率（L×・太さ×）</div>
             <div class="menu-desc">剛性倍率 = 太さ⁴ / L³（基準=1）</div>
         </a>
+
+        <a class="menu-item" href="/calc/cutting-time">
+            <div class="menu-title">切削時間</div>
+            <div class="menu-desc">距離L（mm） / 送りvf（mm/min） → 時間</div>
+        </a>
+
+        <a class="menu-item" href="/calc/edge-contact-length">
+            <div class="menu-title">切れ刃接触長の変動（ap/ae・ねじれ）</div>
+            <div class="menu-desc">D・ae・ap・z・β → 接触刃長の波形（代表刃 / 全刃合計）</div>
+        </a>
+
+
     </div>
 </section>
 

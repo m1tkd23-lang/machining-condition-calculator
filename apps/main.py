@@ -69,6 +69,10 @@ def create_app() -> Flask:
     def calc_edge_contact_length():
         return render_template("calculators/edge_contact_length.html")
 
+    @app.get("/calc/arc-feed-comp")
+    def calc_arc_feed_comp():
+        return render_template("calculators/arc_feed_comp.html")
+
 
 
 
