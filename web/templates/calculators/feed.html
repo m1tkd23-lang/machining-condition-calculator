@@ -1,3 +1,5 @@
+<!-- web/templates/calculators/feed.html -->
+
 {% extends "base.html" %}
 {% set title = "送り（vf ↔ fz）- 加工条件 電卓" %}
 
@@ -21,8 +23,7 @@
         <div class="panel" id="panel_rpm_direct">
             <label class="field">
                 <span>回転数 n（rpm）</span>
-                <input id="rpm" type="number" inputmode="decimal" step="1" min="0" value="10000" readonly
-                    data-numpad="int">
+                <input id="rpm" value="10000" readonly data-numpad="int" autocomplete="off">
             </label>
         </div>
 
@@ -30,14 +31,12 @@
         <div class="panel hidden" id="panel_rpm_from_vc">
             <label class="field">
                 <span>工具径 D（mm）</span>
-                <input id="diameter_mm" type="number" inputmode="decimal" step="0.01" min="0" value="10" readonly
-                    data-numpad="decimal">
+                <input id="diameter_mm" value="10" readonly data-numpad="decimal" autocomplete="off">
             </label>
 
             <label class="field">
                 <span>周速 Vc（m/min）</span>
-                <input id="vc_mmin" type="number" inputmode="decimal" step="0.1" min="0" value="200" readonly
-                    data-numpad="decimal">
+                <input id="vc_mmin" value="200" readonly data-numpad="decimal" autocomplete="off">
             </label>
 
             <div class="row" style="margin-top: 0;">
@@ -49,18 +48,17 @@
         <!-- Common inputs -->
         <label class="field">
             <span>刃数 z（teeth）</span>
-            <input id="teeth" type="number" inputmode="numeric" step="1" min="0" value="4" readonly data-numpad="int">
+            <input id="teeth" value="4" readonly data-numpad="int" autocomplete="off">
         </label>
 
         <label class="field">
             <span>送り速度 vf（mm/min）</span>
-            <input id="vf" type="number" inputmode="decimal" step="1" min="0" value="" readonly data-numpad="int">
+            <input id="vf" value="" readonly data-numpad="int" autocomplete="off">
         </label>
 
         <label class="field">
             <span>1刃送り fz（mm/tooth）</span>
-            <input id="fz" type="number" inputmode="decimal" step="0.001" min="0" value="0.05" readonly
-                data-numpad="decimal">
+            <input id="fz" value="0.05" readonly data-numpad="decimal" autocomplete="off">
         </label>
     </div>
 

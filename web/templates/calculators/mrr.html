@@ -1,3 +1,5 @@
+<!-- web/templates/calculators/mrr.html -->
+
 {% extends "base.html" %}
 {% set title = "除去量（MRR / Q）- 加工条件 電卓" %}
 
@@ -15,7 +17,7 @@
         </button>
     </div>
 
-    <!-- vf mode tabs (mainly for ae% mode, but使えるように共通配置) -->
+    <!-- vf mode tabs -->
     <div class="tabs" role="tablist" aria-label="vfの入力方式">
         <button type="button" class="tab active" role="tab" aria-selected="true" id="tab_vf_direct"
             data-tab="vf_direct">
@@ -30,16 +32,14 @@
 
         <label class="field">
             <span>切込み ap（mm）</span>
-            <input id="ap_mm" type="number" inputmode="decimal" step="0.01" min="0" value="1.00" readonly
-                data-numpad="decimal">
+            <input id="ap_mm" value="1.00" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
         <!-- ae(mm) mode panel -->
         <div class="panel" id="panel_ae_mm">
             <label class="field">
                 <span>切削幅 ae（mm）</span>
-                <input id="ae_mm" type="number" inputmode="decimal" step="0.01" min="0" value="5.00" readonly
-                    data-numpad="decimal">
+                <input id="ae_mm" value="5.00" readonly data-numpad="decimal" autocomplete="off">
             </label>
         </div>
 
@@ -47,14 +47,12 @@
         <div class="panel hidden" id="panel_ae_pct">
             <label class="field">
                 <span>工具径 D（mm）</span>
-                <input id="tool_d_mm" type="number" inputmode="decimal" step="0.01" min="0" value="10.00" readonly
-                    data-numpad="decimal">
+                <input id="tool_d_mm" value="10.00" readonly data-numpad="decimal" autocomplete="off">
             </label>
 
             <label class="field">
-                <span>係合率 ae/D（%）</span>
-                <input id="ae_pct" type="number" inputmode="decimal" step="0.1" min="0" value="50.0" readonly
-                    data-numpad="decimal">
+                <span>係合率 ae/D（1 = 100%）</span>
+                <input id="ae_pct" value="0.5" readonly data-numpad="decimal" autocomplete="off">
             </label>
 
             <div class="row" style="margin-top:0;">
@@ -66,8 +64,7 @@
         <div class="panel" id="panel_vf_direct">
             <label class="field">
                 <span>送り速度 vf（mm/min）</span>
-                <input id="vf_mmin" type="number" inputmode="decimal" step="1" min="0" value="1000" readonly
-                    data-numpad="int">
+                <input id="vf_mmin" value="1000" readonly data-numpad="int" autocomplete="off">
             </label>
         </div>
 
@@ -75,20 +72,17 @@
         <div class="panel hidden" id="panel_vf_from_vc">
             <label class="field">
                 <span>周速 Vc（m/min）</span>
-                <input id="vc_mmin" type="number" inputmode="decimal" step="0.1" min="0" value="200.0" readonly
-                    data-numpad="decimal">
+                <input id="vc_mmin" value="200.0" readonly data-numpad="decimal" autocomplete="off">
             </label>
 
             <label class="field">
                 <span>刃数 z（teeth）</span>
-                <input id="teeth" type="number" inputmode="numeric" step="1" min="0" value="4" readonly
-                    data-numpad="int">
+                <input id="teeth" value="4" readonly data-numpad="int" autocomplete="off">
             </label>
 
             <label class="field">
                 <span>1刃送り fz（mm/tooth）</span>
-                <input id="fz" type="number" inputmode="decimal" step="0.001" min="0" value="0.05" readonly
-                    data-numpad="decimal">
+                <input id="fz" value="0.05" readonly data-numpad="decimal" autocomplete="off">
             </label>
 
             <div class="row" style="margin-top:0;">
@@ -100,14 +94,12 @@
         <!-- outputs -->
         <label class="field">
             <span>除去量 Q（mm³/min）</span>
-            <input id="q_mm3min" type="number" inputmode="decimal" step="1" min="0" value="" readonly
-                data-numpad="decimal">
+            <input id="q_mm3min" value="" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
         <label class="field">
             <span>除去量 Q（cm³/min）</span>
-            <input id="q_cm3min" type="number" inputmode="decimal" step="0.01" min="0" value="" readonly
-                data-numpad="decimal">
+            <input id="q_cm3min" value="" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
     </div>

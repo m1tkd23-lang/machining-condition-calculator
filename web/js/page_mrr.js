@@ -1,3 +1,4 @@
+// web/js/page_mrr.js
 (function () {
     const $ = (id) => document.getElementById(id);
 
@@ -31,6 +32,9 @@
     function setActiveAeMode(mode) {
         aeMode = mode;
 
+        // ★ タブ切替で状態が変わるのでテンキーを閉じて activeInput をリセット
+        if (window.Numpad?.hide) window.Numpad.hide();
+
         const tabA = $("tab_ae_mm");
         const tabB = $("tab_ae_pct");
         const panelA = $("panel_ae_mm");
@@ -52,6 +56,9 @@
 
     function setActiveVfMode(mode) {
         vfMode = mode;
+
+        // ★ タブ切替で状態が変わるのでテンキーを閉じて activeInput をリセット
+        if (window.Numpad?.hide) window.Numpad.hide();
 
         const tabA = $("tab_vf_direct");
         const tabB = $("tab_vf_from_vc");
@@ -81,11 +88,11 @@
         if (aeMode === "ae_mm") {
             return toNumber($("ae_mm")?.value);
         }
-        // ae% mode
+        // ae/D mode (1 = 100%)
         const D = toNumber($("tool_d_mm")?.value);
-        const pct = toNumber($("ae_pct")?.value);
-        if (!Number.isFinite(D) || !Number.isFinite(pct)) return NaN;
-        return D * (pct / 100.0);
+        const ratio = toNumber($("ae_pct")?.value);
+        if (!Number.isFinite(D) || !Number.isFinite(ratio)) return NaN;
+        return D * ratio;
     }
 
     function syncAeEffective(silent) {
@@ -94,15 +101,15 @@
             return;
         }
         const D = toNumber($("tool_d_mm")?.value);
-        const pct = toNumber($("ae_pct")?.value);
+        const ratio = toNumber($("ae_pct")?.value);
         const ae = getAeEffectiveMm();
 
-        if (!Number.isFinite(D) || !Number.isFinite(pct) || !(ae > 0)) {
+        if (!Number.isFinite(D) || !Number.isFinite(ratio) || !(ae > 0)) {
             setAePreview("");
-            if (!silent) setMsg("入力値を確認してください（D と % は 0 より大きい値）。", true);
+            if (!silent) setMsg("入力値を確認してください（D と ae/D は 0 より大きい値）。", true);
             return;
         }
-        setAePreview(`ae ≒ ${round(ae, 3)} mm（D×%/100）`);
+        setAePreview(`ae ≒ ${round(ae, 3)} mm（D × ae/D）`);
     }
 
     // ---- effective vf ----
@@ -112,8 +119,6 @@
     }
 
     function getToolDForRpm() {
-        // 周速からrpmを作る D は、ae%モードなら tool_d_mm を優先、そうでなければ tool_d_mm が空でも使えるようにする
-        // ここは「周速モードを使うならD必須」にしたいので、tool_d_mm を参照
         return toNumber($("tool_d_mm")?.value);
     }
 
@@ -149,7 +154,6 @@
     }
 
     function getVfEffective() {
-        // 周速モードでも vf_mmin に同期しているので、最終的にここを見るだけでOK
         return toNumber($("vf_mmin")?.value);
     }
 
@@ -181,11 +185,9 @@
         }
 
         $("vf_mmin").value = String(Math.round(vf));
-        // 逆算後はプレビューも整合させる（周速モードなら表示は“同期値”なので消す）
         if (vfMode === "vf_from_vc") {
             setVfPreview("※vfを逆算で上書きしました（周速同期とは一致しない場合あり）");
         }
-        // Qの表示も整合
         const q2 = window.MRR.calcQ(ap, ae, Math.round(vf));
         setQOutputs(q2);
 
@@ -198,10 +200,10 @@
     setActiveVfMode("vf_direct");
 
     // tab events
-    $("tab_ae_mm")?.addEventListener("click", (e) => setActiveAeMode("ae_mm"));
-    $("tab_ae_pct")?.addEventListener("click", (e) => setActiveAeMode("ae_pct"));
-    $("tab_vf_direct")?.addEventListener("click", (e) => setActiveVfMode("vf_direct"));
-    $("tab_vf_from_vc")?.addEventListener("click", (e) => setActiveVfMode("vf_from_vc"));
+    $("tab_ae_mm")?.addEventListener("click", () => setActiveAeMode("ae_mm"));
+    $("tab_ae_pct")?.addEventListener("click", () => setActiveAeMode("ae_pct"));
+    $("tab_vf_direct")?.addEventListener("click", () => setActiveVfMode("vf_direct"));
+    $("tab_vf_from_vc")?.addEventListener("click", () => setActiveVfMode("vf_from_vc"));
 
     // buttons
     $("btn_calc_q")?.addEventListener("click", onCalcQ);

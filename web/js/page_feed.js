@@ -1,3 +1,4 @@
+// web/js/page_feed.js
 (function () {
     const $ = (id) => document.getElementById(id);
 
@@ -24,6 +25,9 @@
     // ---- tab handling ----
     function setActiveTab(tabName) {
         currentTab = tabName;
+
+        // ★ タブ切替で状態が変わるのでテンキーを閉じて activeInput をリセット
+        if (window.Numpad?.hide) window.Numpad.hide();
 
         const tabA = $("tab_rpm_direct");
         const tabB = $("tab_rpm_from_vc");
