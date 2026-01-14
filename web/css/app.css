@@ -500,3 +500,25 @@ input.numpad-active {
 .panel {
     margin-bottom: 4px;
 }
+
+.grid-group {
+    grid-column: 1 / -1;
+    /* グリッド全幅を1ブロック化 */
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 6px;
+}
+
+.group-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    opacity: .9;
+    margin-bottom: 8px;
+}
+
+.grid-group.hint {
+    border-style: dashed;
+    /* “補助ツール感” */
+    background: rgba(255, 255, 255, .03);
+}

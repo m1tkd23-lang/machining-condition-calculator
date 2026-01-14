@@ -1,49 +1,74 @@
-<!--web/templates/calculators/ball_end_contact_diameter.html-->
+<!-- web/templates/calculators/ball_end_contact_diameter.html -->
 
 {% extends "base.html" %}
-{% set title = "ボール切削点直径（リード/チルト）- 加工条件 電卓" %}
+{% set title = "ボールエンド・切削点直径（工具軸角度）- 加工条件 電卓" %}
 
 {% block content %}
 <section class="card">
-    <h2>ボール切削点直径（リード角 / チルト角）</h2>
+    <h2>ボールエンド 切削点直径（工具軸角度）</h2>
 
     <div class="grid">
+
+        <!-- ===== 入力：工具・姿勢 ===== -->
         <label class="field">
             <span>ボール半径 R（mm）</span>
-            <input id="r_mm" type="number" inputmode="decimal" step="0.01" min="0" value="5.00" readonly
-                data-numpad="decimal" autocomplete="off">
+            <input id="r_mm" value="5.00" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>回転数 n（rpm）</span>
+            <input id="rpm" value="20000" readonly data-numpad="int" autocomplete="off">
         </label>
 
         <label class="field">
             <span>リード角 lead（deg）</span>
-            <input id="lead_deg" type="number" inputmode="decimal" step="0.1" min="0" value="10.0" readonly
-                data-numpad="decimal" autocomplete="off">
+            <input id="lead_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
         <label class="field">
             <span>チルト角 tilt（deg）</span>
-            <input id="tilt_deg" type="number" inputmode="decimal" step="0.1" min="0" value="10.0" readonly
-                data-numpad="decimal" autocomplete="off">
+            <input id="tilt_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
-        <!-- outputs -->
-        <label class="field">
-            <span>合成傾き γ（deg）</span>
-            <input id="gamma_deg" type="number" inputmode="decimal" step="0.1" min="0" value="" readonly
-                data-numpad="decimal" autocomplete="off">
-        </label>
+        <!-- ===== 計算結果：現在条件 ===== -->
+        <div class="grid-group">
+            <div class="group-title">現在条件（切削点）</div>
 
-        <label class="field">
-            <span>切削点直径 Dcp（mm）</span>
-            <input id="dcp_mm" type="number" inputmode="decimal" step="0.001" min="0" value="" readonly
-                data-numpad="decimal" autocomplete="off">
-        </label>
+            <label class="field">
+                <span>合成傾き γ（deg）</span>
+                <input id="gamma_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
 
-        <label class="field">
-            <span>参考：先端からの高さ h（mm）</span>
-            <input id="h_mm" type="number" inputmode="decimal" step="0.001" min="0" value="" readonly
-                data-numpad="decimal" autocomplete="off">
-        </label>
+            <label class="field">
+                <span>切削点直径 Dcp（mm）</span>
+                <input id="dcp_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>有効周速 Vc_eff（m/min）</span>
+                <input id="vc_eff_mmin" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>参考：先端からの高さ h（mm）</span>
+                <input id="h_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+        <!-- ===== 逆算ブロック ===== -->
+        <div class="grid-group hint">
+            <div class="group-title">目標から逆算（オプション）</div>
+
+            <label class="field">
+                <span>目標 有効周速 Vc_eff_target（m/min）</span>
+                <input id="vc_eff_target" value="600" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>必要回転数 n_req（rpm）</span>
+                <input id="rpm_req" value="" readonly data-numpad="int" autocomplete="off">
+            </label>
+        </div>
     </div>
 
     <div class="row">
@@ -54,10 +79,11 @@
     <div id="msg" class="msg" aria-live="polite"></div>
 
     <div class="note">
-        定義：0°=先端 / 90°=側面<br>
+        定義：0° = 先端 / 90° = 側面<br>
         合成傾き：γ = arccos( cos(lead) × cos(tilt) )<br>
         切削点直径：Dcp = 2R sin(γ)<br>
-        参考：h = R(1 − cos(γ))
+        有効周速：Vc_eff = π × Dcp × n / 1000<br>
+        参考高さ：h = R (1 − cosγ)
     </div>
 </section>
 {% endblock %}
