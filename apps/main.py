@@ -47,7 +47,14 @@ def create_app() -> Flask:
         return render_template("calculators/mrr.html")
 
 
+    @app.get("/calc/ball-end-effective")
+    def calc_ball_end_effective():
+        return render_template("calculators/ball_end_effective.html")
 
+
+    @app.get("/calc/drill-point-height")
+    def calc_drill_point_height():
+        return render_template("calculators/drill_point_height.html")
 
 
 

@@ -1,0 +1,91 @@
+<!-- web/templates/calculators/drill_point_height.html -->
+
+{% extends "base.html" %}
+{% set title = "ドリル肩高さ・面取り（カウンターシンク）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>ドリル肩高さ（直径・先端角）</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>ドリル直径 D（mm）</span>
+            <input id="d_mm" value="10.00" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>先端角 θ（deg）</span>
+            <input id="theta_deg" value="118" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>半角 α（deg）</span>
+            <input id="alpha_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>肩の高さ H（mm）</span>
+            <input id="h_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc" class="btn">肩高さを計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        肩高さ：H = (D/2) / tan(θ/2)　※ θ は全角（例：118°）
+    </div>
+</section>
+
+<section class="card">
+    <h2>面取り（カウンターシンク）径 ↔ 深さ</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>下側直径 D2（mm）※穴径</span>
+            <input id="cs_d2_mm" value="10.00" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>上側直径 D1（mm）※面取り径</span>
+            <input id="cs_d1_mm" value="12.00" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>面取り深さ t（mm）</span>
+            <input id="cs_t_mm" value="0.50" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>カウンターシンク角 θ（deg）</span>
+            <input id="cs_theta_deg" value="90" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>半角 α（deg）</span>
+            <input id="cs_alpha_deg" value="" readonly data-numpad="decimal" autocomplete="off">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_cs_calc_t" class="btn">D1・D2 から t を計算</button>
+        <button id="btn_cs_calc_d1" class="btn">t・D2 から D1 を計算</button>
+    </div>
+
+    <div id="cs_msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        t = (D1 − D2) / (2 tan(θ/2)) ／ D1 = D2 + 2t tan(θ/2)<br>
+        ※ θ は全角（例：90°, 82°, 120°）
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/drill.js"></script>
+<script src="/js/page_drill_point_height.js"></script>
+{% endblock %}

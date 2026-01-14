@@ -1,3 +1,5 @@
+<!-- web/templates/index.html -->
+
 {% extends "base.html" %}
 {% set title = "トップ - 加工条件 電卓" %}
 
@@ -16,7 +18,6 @@
             <div class="menu-desc">vf（mm/min） / fz（mm/tooth） / z（刃数） / n（rpm）</div>
         </a>
 
-
         <a class="menu-item" href="/calc/cutting-time">
             <div class="menu-title">切削時間</div>
             <div class="menu-desc">距離L（mm） / 送りvf（mm/min） → 時間</div>
@@ -27,18 +28,25 @@
             <div class="menu-desc">R（mm）/ f（mm/rev） ↔ h（µm）</div>
         </a>
 
-
         <a class="menu-item" href="/calc/mrr">
             <div class="menu-title">除去量（MRR / Q）</div>
             <div class="menu-desc">ap・ae・vf → Q（mm³/min, cm³/min）</div>
+        </a>
+
+        <a class="menu-item" href="/calc/drill-point-height">
+            <div class="menu-title">ドリル肩高さ（直径・先端角）</div>
+            <div class="menu-desc">D・θ → 肩の高さH（円錐高さ）</div>
+        </a>
+
+        <a class="menu-item" href="/calc/ball-end-effective">
+            <div class="menu-title">ボール有効径（接触高さ）</div>
+            <div class="menu-desc">R・h → Deff / Vc_eff / vf / 粗さ目安</div>
         </a>
 
         <a class="menu-item" href="/calc/rigidity-ratio">
             <div class="menu-title">剛性倍率（L×・太さ×）</div>
             <div class="menu-desc">剛性倍率 = 太さ⁴ / L³（基準=1）</div>
         </a>
-
-
     </div>
 </section>
 
