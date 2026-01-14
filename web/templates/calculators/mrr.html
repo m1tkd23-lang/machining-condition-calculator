@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% set title = "除去量（MRR / Q）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>除去量（MRR / Q）</h2>
+
+    <!-- ae mode tabs -->
+    <div class="tabs" role="tablist" aria-label="aeの入力方式">
+        <button type="button" class="tab active" role="tab" aria-selected="true" id="tab_ae_mm" data-tab="ae_mm">
+            ae を mmで入力
+        </button>
+        <button type="button" class="tab" role="tab" aria-selected="false" id="tab_ae_pct" data-tab="ae_pct">
+            ae を 係合率%（ae/D）
+        </button>
+    </div>
+
+    <!-- vf mode tabs (mainly for ae% mode, but使えるように共通配置) -->
+    <div class="tabs" role="tablist" aria-label="vfの入力方式">
+        <button type="button" class="tab active" role="tab" aria-selected="true" id="tab_vf_direct"
+            data-tab="vf_direct">
+            vf を直接入力
+        </button>
+        <button type="button" class="tab" role="tab" aria-selected="false" id="tab_vf_from_vc" data-tab="vf_from_vc">
+            周速（Vc）から vf
+        </button>
+    </div>
+
+    <div class="grid">
+
+        <label class="field">
+            <span>切込み ap（mm）</span>
+            <input id="ap_mm" type="number" inputmode="decimal" step="0.01" min="0" value="1.00" readonly
+                data-numpad="decimal">
+        </label>
+
+        <!-- ae(mm) mode panel -->
+        <div class="panel" id="panel_ae_mm">
+            <label class="field">
+                <span>切削幅 ae（mm）</span>
+                <input id="ae_mm" type="number" inputmode="decimal" step="0.01" min="0" value="5.00" readonly
+                    data-numpad="decimal">
+            </label>
+        </div>
+
+        <!-- ae(%) mode panel -->
+        <div class="panel hidden" id="panel_ae_pct">
+            <label class="field">
+                <span>工具径 D（mm）</span>
+                <input id="tool_d_mm" type="number" inputmode="decimal" step="0.01" min="0" value="10.00" readonly
+                    data-numpad="decimal">
+            </label>
+
+            <label class="field">
+                <span>係合率 ae/D（%）</span>
+                <input id="ae_pct" type="number" inputmode="decimal" step="0.1" min="0" value="50.0" readonly
+                    data-numpad="decimal">
+            </label>
+
+            <div class="row" style="margin-top:0;">
+                <span class="mono" id="ae_eff_preview"></span>
+            </div>
+        </div>
+
+        <!-- vf direct panel -->
+        <div class="panel" id="panel_vf_direct">
+            <label class="field">
+                <span>送り速度 vf（mm/min）</span>
+                <input id="vf_mmin" type="number" inputmode="decimal" step="1" min="0" value="1000" readonly
+                    data-numpad="int">
+            </label>
+        </div>
+
+        <!-- vf from Vc panel -->
+        <div class="panel hidden" id="panel_vf_from_vc">
+            <label class="field">
+                <span>周速 Vc（m/min）</span>
+                <input id="vc_mmin" type="number" inputmode="decimal" step="0.1" min="0" value="200.0" readonly
+                    data-numpad="decimal">
+            </label>
+
+            <label class="field">
+                <span>刃数 z（teeth）</span>
+                <input id="teeth" type="number" inputmode="numeric" step="1" min="0" value="4" readonly
+                    data-numpad="int">
+            </label>
+
+            <label class="field">
+                <span>1刃送り fz（mm/tooth）</span>
+                <input id="fz" type="number" inputmode="decimal" step="0.001" min="0" value="0.05" readonly
+                    data-numpad="decimal">
+            </label>
+
+            <div class="row" style="margin-top:0;">
+                <button id="btn_sync_vf" class="btn btn-sub">Vc/D/fz/z から vf を同期</button>
+                <span class="mono" id="vf_eff_preview"></span>
+            </div>
+        </div>
+
+        <!-- outputs -->
+        <label class="field">
+            <span>除去量 Q（mm³/min）</span>
+            <input id="q_mm3min" type="number" inputmode="decimal" step="1" min="0" value="" readonly
+                data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>除去量 Q（cm³/min）</span>
+            <input id="q_cm3min" type="number" inputmode="decimal" step="0.01" min="0" value="" readonly
+                data-numpad="decimal">
+        </label>
+
+    </div>
+
+    <div class="row">
+        <button id="btn_calc_q" class="btn">Q を計算</button>
+        <button id="btn_calc_vf" class="btn">ap・ae・Q から vf を逆算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+    <div class="note">
+        式：Q = ap × ae × vf（ap: mm, ae: mm, vf: mm/min → Q: mm³/min）<br>
+        係合率モード：ae(mm) = D × (ae/D%) / 100<br>
+        周速モード：n = 1000×Vc / (π×D), vf = fz × z × n
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/mrr.js"></script>
+<script src="/js/calculators/cutting_speed.js"></script>
+<script src="/js/calculators/feed.js"></script>
+<script src="/js/page_mrr.js"></script>
+{% endblock %}

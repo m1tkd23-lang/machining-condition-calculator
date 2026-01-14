@@ -42,6 +42,12 @@ def create_app() -> Flask:
         return render_template("calculators/rigidity_ratio.html")
 
 
+    @app.get("/calc/mrr")
+    def calc_mrr():
+        return render_template("calculators/mrr.html")
+
+
+
 
 
 
