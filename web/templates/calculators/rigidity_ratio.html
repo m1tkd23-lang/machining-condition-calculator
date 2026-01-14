@@ -1,0 +1,44 @@
+<!--web/templates/calculators/rigidity_ratio.html-->
+{% extends "base.html" %}
+{% set title = "剛性倍率（L×・太さ×）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>剛性倍率（基準=1）</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>長さ倍率 L×（例：2 → 長さ2倍）</span>
+            <input id="l_ratio" ... step="0.01" min="0" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>太さ倍率 d×（例：1.2 → 太さ1.2倍）</span>
+            <input id="d_ratio" ... step="0.01" min="0" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>剛性倍率 k×（基準=1）</span>
+            <input id="k_ratio" type="number" inputmode="decimal" step="0.001" min="0" value="" readonly
+                data-numpad="decimal">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc" class="btn">倍率を計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        片持ち梁のたわみに対する剛性の比（材質同一・相似形）<br>
+        剛性倍率：k× = (太さ倍率 d×)^4 / (長さ倍率 L×)^3
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/rigidity_ratio.js"></script>
+<script src="/js/page_rigidity_ratio.js"></script>
+{% endblock %}

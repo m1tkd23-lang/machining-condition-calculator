@@ -1,0 +1,38 @@
+<!--web/templates/base.html-->
+
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{ title or "Machining Condition Calculator" }}</title>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/css/app.css" />
+</head>
+
+<body>
+    <header class="app-header">
+        <h1><a class="brand" href="/">加工条件 電卓</a></h1>
+        <div class="sub">社内LAN用 / 最小プロトタイプ</div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 共通（SW登録など） -->
+
+    <!-- 共通テンキー（全ページ） -->
+    <script src="/js/widgets/numpad.js"></script>
+
+    <!-- 共通（SW登録など） -->
+    <script src="/js/app.js"></script>
+
+
+    <script src="/js/app.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

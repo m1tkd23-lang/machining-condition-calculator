@@ -1,0 +1,43 @@
+<!--web/templates/calculators/cutting_speed.html-->
+
+{% extends "base.html" %}
+{% set title = "周速 ↔ 回転数 - 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>周速 ↔ 回転数</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>工具径 D（mm）</span>
+            <input id="diameter_mm" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>周速 Vc（m/min）</span>
+            <input id="vc_mmin" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>回転数 n（rpm）</span>
+            <input id="rpm" ... readonly data-numpad="int">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc_rpm" class="btn">Vc と D から n を計算</button>
+        <button id="btn_calc_vc" class="btn">n と D から Vc を計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+    <div class="note">
+        式：Vc = π × D × n / 1000 （D: mm, Vc: m/min, n: rpm）
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/cutting_speed.js"></script>
+<script src="/js/page_cutting_speed.js"></script>
+{% endblock %}

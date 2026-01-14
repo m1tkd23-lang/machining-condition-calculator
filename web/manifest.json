@@ -1,0 +1,8 @@
+{
+    "name": "Machining Condition Calculator",
+    "short_name": "MCC",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff"
+}

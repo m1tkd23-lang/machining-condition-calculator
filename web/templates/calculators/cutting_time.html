@@ -1,0 +1,47 @@
+<!--web/templates/calculators/cutting_time.html-->
+
+{% extends "base.html" %}
+{% set title = "切削時間 - 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>切削時間</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>切削距離 L（mm）</span>
+            <input id="length_mm" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>送り速度 vf（mm/min）</span>
+            <input id="vf_mmin" ... readonly data-numpad="int">
+        </label>
+
+        <label class="field">
+            <span>切削時間（min）</span>
+            <input id="time_min" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>切削時間（sec）</span>
+            <input id="time_sec" ... readonly data-numpad="decimal">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc_time" class="btn">L と vf から時間を計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+    <div class="note">
+        式：t(min) = L / vf（L: mm, vf: mm/min）
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/cutting_time.js"></script>
+<script src="/js/page_cutting_time.js"></script>
+{% endblock %}

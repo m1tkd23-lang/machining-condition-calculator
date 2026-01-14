@@ -1,0 +1,44 @@
+<!--web/templates/calculators/surface_roughness.html-->
+
+{% extends "base.html" %}
+{% set title = "理論仕上げ面粗さ（h）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>理論仕上げ面粗さ（h）</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>コーナー半径 R（mm）</span>
+            <input id="r_mm" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>送り量 f（mm/rev）</span>
+            <input id="f_mmrev" ... readonly data-numpad="decimal">
+        </label>
+
+        <label class="field">
+            <span>理論粗さ h（µm）</span>
+            <input id="h_um" ... readonly data-numpad="decimal">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc_h" class="btn">R と f から h を計算</button>
+        <button id="btn_calc_f" class="btn">R と h から f を逆算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+    <div class="note">
+        式：h = f² / (8R)（R: mm, f: mm/rev, h: mm） ※表示は µm<br>
+        逆算：f = √(8Rh)
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/surface_roughness.js"></script>
+<script src="/js/page_surface_roughness.js"></script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% set title = "トップ - 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>計算メニュー</h2>
+
+    <div class="menu">
+        <a class="menu-item" href="/calc/cutting-speed">
+            <div class="menu-title">周速 ↔ 回転数</div>
+            <div class="menu-desc">工具径D / 周速Vc / 回転数n</div>
+        </a>
+
+        <a class="menu-item" href="/calc/feed">
+            <div class="menu-title">送り（vf ↔ fz）</div>
+            <div class="menu-desc">vf（mm/min） / fz（mm/tooth） / z（刃数） / n（rpm）</div>
+        </a>
+
+
+        <a class="menu-item" href="/calc/cutting-time">
+            <div class="menu-title">切削時間</div>
+            <div class="menu-desc">距離L（mm） / 送りvf（mm/min） → 時間</div>
+        </a>
+
+        <a class="menu-item" href="/calc/surface-roughness">
+            <div class="menu-title">理論仕上げ面粗さ（h）</div>
+            <div class="menu-desc">R（mm）/ f（mm/rev） ↔ h（µm）</div>
+        </a>
+
+        <a class="menu-item" href="/calc/rigidity-ratio">
+            <div class="menu-title">剛性倍率（L×・太さ×）</div>
+            <div class="menu-desc">剛性倍率 = 太さ⁴ / L³（基準=1）</div>
+        </a>
+
+
+    </div>
+</section>
+
+<section class="card">
+    <h2>動作確認</h2>
+    <div class="row">
+        <button id="btn_health" class="btn btn-sub">/health を確認</button>
+        <span id="health_result" class="mono"></span>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!--web/templates/calculators/feed.html-->
+
+{% extends "base.html" %}
+{% set title = "送り（vf ↔ fz）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>送り（vf ↔ fz）</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>回転数 n（rpm）</span>
+            <input id="rpm" ... readonly data-numpad="int">
+        </label>
+
+        <label class="field">
+            <span>刃数 z（teeth）</span>
+            <input id="teeth" ... readonly data-numpad="int">
+        </label>
+
+        <label class="field">
+            <span>送り速度 vf（mm/min）</span>
+            <input id="vf" ... readonly data-numpad="int">
+        </label>
+
+        <label class="field">
+            <span>1刃送り fz（mm/tooth）</span>
+            <input id="fz" ... readonly data-numpad="decimal">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc_vf" class="btn">n・z・fz から vf を計算</button>
+        <button id="btn_calc_fz" class="btn">n・z・vf から fz を計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+    <div class="note">
+        式：vf = fz × z × n（vf: mm/min, fz: mm/tooth, z: teeth, n: rpm）
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/feed.js"></script>
+<script src="/js/page_feed.js"></script>
+{% endblock %}
