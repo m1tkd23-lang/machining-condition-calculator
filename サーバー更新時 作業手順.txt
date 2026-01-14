@@ -1,6 +1,17 @@
 加工条件 電卓
+
+
+nssm stop machining-condition-calculator
+cd C:\apps\machining-condition-calculator
+git pull
+nssm start machining-condition-calculator
+
+
+
 サーバー更新時 作業手順
 対象
+
+
 
 サーバーPC：常時稼働 Windows PC（NSSM + Waitress）
 

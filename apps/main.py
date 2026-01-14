@@ -56,6 +56,12 @@ def create_app() -> Flask:
     def calc_drill_point_height():
         return render_template("calculators/drill_point_height.html")
 
+    @app.get("/calc/ball-end-contact-diameter")
+    def calc_ball_end_contact_diameter():
+        return render_template("calculators/ball_end_contact_diameter.html")
+
+
+
 
 
     @app.get("/health")

@@ -1,0 +1,68 @@
+<!--web/templates/calculators/ball_end_contact_diameter.html-->
+
+{% extends "base.html" %}
+{% set title = "ボール切削点直径（リード/チルト）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>ボール切削点直径（リード角 / チルト角）</h2>
+
+    <div class="grid">
+        <label class="field">
+            <span>ボール半径 R（mm）</span>
+            <input id="r_mm" type="number" inputmode="decimal" step="0.01" min="0" value="5.00" readonly
+                data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>リード角 lead（deg）</span>
+            <input id="lead_deg" type="number" inputmode="decimal" step="0.1" min="0" value="10.0" readonly
+                data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>チルト角 tilt（deg）</span>
+            <input id="tilt_deg" type="number" inputmode="decimal" step="0.1" min="0" value="10.0" readonly
+                data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <!-- outputs -->
+        <label class="field">
+            <span>合成傾き γ（deg）</span>
+            <input id="gamma_deg" type="number" inputmode="decimal" step="0.1" min="0" value="" readonly
+                data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>切削点直径 Dcp（mm）</span>
+            <input id="dcp_mm" type="number" inputmode="decimal" step="0.001" min="0" value="" readonly
+                data-numpad="decimal" autocomplete="off">
+        </label>
+
+        <label class="field">
+            <span>参考：先端からの高さ h（mm）</span>
+            <input id="h_mm" type="number" inputmode="decimal" step="0.001" min="0" value="" readonly
+                data-numpad="decimal" autocomplete="off">
+        </label>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc" class="btn">計算</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        定義：0°=先端 / 90°=側面<br>
+        合成傾き：γ = arccos( cos(lead) × cos(tilt) )<br>
+        切削点直径：Dcp = 2R sin(γ)<br>
+        参考：h = R(1 − cos(γ))
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/ball_end_contact.js"></script>
+<script src="/js/page_ball_end_contact_diameter.js"></script>
+{% endblock %}
