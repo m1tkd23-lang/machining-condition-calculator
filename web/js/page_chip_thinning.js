@@ -45,15 +45,17 @@
         setValue("k_factor", String(round(r.k_factor, 3)));
         setValue("fz_adj_mm", String(round(r.fz_adj_mm, 4)));
 
-        // 薄化の強さに応じた段階表示
+        // 判定は実効切りくず厚 h_eff を主軸にする
         let msg = "";
-        if (r.k_factor <= 1.05) {
-            msg = "薄化はほぼ発生していません。";
-        } else if (r.k_factor <= 1.5) {
-            msg = "薄化が発生しています（条件次第）。";
+
+        if (r.h_eff_mm < 0.02) {
+            msg = "実効切りくず厚が非常に小さいです（擦り寄り・補正推奨）。";
+        } else if (r.h_eff_mm < 0.04) {
+            msg = "実効切りくず厚は小さめです（条件次第）。";
         } else {
-            msg = "薄化が強く発生しています（補正推奨）。";
+            msg = "実効切りくず厚は十分に確保されています。";
         }
+
         setMsg(msg, false);
     }
 
