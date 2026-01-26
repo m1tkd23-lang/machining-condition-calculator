@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>DMS（°′″）⇄ 十進角（decimal degrees）</h2>
+
+<p class="hint">
+    符号（±）は「度」に持たせます（例：-10° 30′ 0″）。
+</p>
+
+<div class="grid-2col">
+    <section class="card">
+        <h3>DMS → 十進角</h3>
+
+        <div class="row">
+            <label>度（°）
+                <input id="dms_deg" type="number" step="1" inputmode="numeric" placeholder="-10">
+            </label>
+            <label>分（′）
+                <input id="dms_min" type="number" step="1" min="0" inputmode="numeric" placeholder="30">
+            </label>
+            <label>秒（″）
+                <input id="dms_sec" type="number" step="0.001" min="0" inputmode="decimal" placeholder="0">
+            </label>
+        </div>
+
+        <div class="actions">
+            <button id="btn_dms_to_dec" type="button" class="btn">→ 変換</button>
+            <button id="btn_clear_dms" type="button" class="btn-secondary">クリア</button>
+        </div>
+
+        <label>十進角（decimal degrees）
+            <input id="out_decimal" type="text" readonly>
+        </label>
+    </section>
+
+    <section class="card">
+        <h3>十進角 → DMS</h3>
+
+        <label>十進角（decimal degrees）
+            <input id="dec_in" type="number" step="0.0000001" inputmode="decimal" placeholder="-10.5">
+        </label>
+
+        <label>秒の表示桁数
+            <select id="sec_digits">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+            </select>
+        </label>
+
+        <div class="actions">
+            <button id="btn_dec_to_dms" type="button" class="btn">→ 変換</button>
+            <button id="btn_clear_dec" type="button" class="btn-secondary">クリア</button>
+        </div>
+
+        <div class="row">
+            <label>度（°）
+                <input id="out_deg" type="text" readonly>
+            </label>
+            <label>分（′）
+                <input id="out_min" type="text" readonly>
+            </label>
+            <label>秒（″）
+                <input id="out_sec" type="text" readonly>
+            </label>
+        </div>
+    </section>
+</div>
+
+<p id="msg" class="msg"></p>
+
+<!-- 計算コア → ページの順で読み込み -->
+<script src="/static/js/calculators/dms_decimal.js"></script>
+<script src="/static/js/page_dms_decimal.js"></script>
+
+{% endblock %}
