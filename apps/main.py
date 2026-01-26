@@ -73,6 +73,8 @@ def create_app() -> Flask:
     def calc_arc_feed_comp():
         return render_template("calculators/arc_feed_comp.html")
 
+
+
     @app.get("/calculators/dms_decimal")
     def dms_decimal():
         return render_template("calculators/dms_decimal.html")
