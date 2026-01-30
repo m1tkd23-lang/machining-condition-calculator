@@ -1,15 +1,16 @@
 <!-- web/templates/calculators/ball_end_surface_roughness.html -->
 
 {% extends "base.html" %}
-{% set title = "ボール仕上げ面粗さ（ピックフィード/傾斜）- 加工条件 電卓" %}
+{% set title = "ボール仕上げ面粗さ（スキャロップ/平面）- 加工条件 電卓" %}
 
 {% block content %}
 <section class="card">
-    <h2>ボール仕上げ面粗さ（ピックフィード/傾斜）</h2>
+    <h2>ボール仕上げ面粗さ（スキャロップ/平面）</h2>
 
     <div class="grid">
+        <!-- ===== 入力 ===== -->
         <div class="grid-group">
-            <div class="group-title">入力（工具・姿勢）</div>
+            <div class="group-title">入力（工具・条件）</div>
 
             <label class="field">
                 <span>ボール半径 R（mm）</span>
@@ -17,26 +18,22 @@
             </label>
 
             <label class="field">
-                <span>傾斜角 θ（deg）※工具軸と面法線</span>
-                <input id="theta_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
-            </label>
-
-            <label class="field">
                 <span>ステップオーバー ae（mm）</span>
                 <input id="ae_mm" value="0.50" readonly data-numpad="decimal" autocomplete="off">
             </label>
+
+            <label class="field hint">
+                <span>傾斜角 θ（deg）※参考：切削点直径</span>
+                <input id="theta_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
         </div>
 
+        <!-- ===== 結果 ===== -->
         <div class="grid-group">
-            <div class="group-title">結果（理論値）</div>
+            <div class="group-title">結果（理論 / 参考）</div>
 
             <label class="field">
-                <span>有効径 Deff（mm）</span>
-                <input id="deff_mm" value="" readonly data-numpad="decimal" autocomplete="off">
-            </label>
-
-            <label class="field">
-                <span>理論カスプ高 h（µm）</span>
+                <span>理論スキャロップ高 h（µm）</span>
                 <input id="h_um" value="" readonly data-numpad="decimal" autocomplete="off">
             </label>
 
@@ -44,24 +41,29 @@
                 <span>推定 Ra（µm）※参考</span>
                 <input id="ra_um" value="" readonly data-numpad="decimal" autocomplete="off">
             </label>
+
+            <label class="field hint">
+                <span>参考：切削点直径 Dcp（mm）</span>
+                <input id="dcp_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
         </div>
     </div>
 
     <div class="row">
-        <button id="btn_calc_h" class="btn">R・θ・ae から h を計算</button>
-        <button id="btn_calc_ae" class="btn">R・θ・h から ae を逆算</button>
-        <button id="btn_calc_ae_from_ra" class="btn">R・θ・Ra から ae を逆算（参考）</button>
+        <button id="btn_calc_h" class="btn">R と ae から h を計算</button>
+        <button id="btn_calc_ae" class="btn">R と h から ae を逆算</button>
+        <button id="btn_calc_ae_from_ra" class="btn">R と Ra から ae を逆算（参考）</button>
         <a class="btn btn-sub" href="/">トップへ戻る</a>
     </div>
 
     <div id="msg" class="msg" aria-live="polite"></div>
 
     <div class="note">
-        目的：等高線仕上げ等の「ピックフィード（ステップオーバー）」由来のカスプ高（理論）<br>
-        有効径：Deff = 2R sinθ（θ: 工具軸と面法線のなす角）<br>
-        カスプ高（厳密）：h = r_eff − √(r_eff² − (ae/2)²), r_eff = Deff/2<br>
-        逆算：ae = 2√(2 r_eff h − h²)<br>
+        目的：平面仕上げでのピックフィード（ステップオーバー）由来スキャロップ（理論）<br>
+        スキャロップ高（厳密）：h = R − √(R² − (ae/2)²)（R, ae, h: mm）※表示は µm<br>
+        逆算：ae = 2√(2Rh − h²)<br>
         推定：Ra ≒ h / 4（※参考）<br>
+        （参考）切削点直径：Dcp = 2R sinθ（θ=0°: 先端 / θ=90°: 側面）<br>
         ※Raは理論粗さhからの近似推定値です（保証値ではありません）
     </div>
 </section>

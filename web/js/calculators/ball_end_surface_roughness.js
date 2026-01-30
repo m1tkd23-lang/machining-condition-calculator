@@ -1,14 +1,13 @@
 // web/js/calculators/ball_end_surface_roughness.js
 //
-// ボール仕上げ面粗さ（ピックフィード/傾斜）
-// θ = 工具軸と面法線のなす角（deg）
-// Deff = 2R sinθ
-// r_eff = Deff/2
+// ボール仕上げ面粗さ（平面のスキャロップ）
+// ※スキャロップはRとaeで決まる（θは影響しない）
 //
-// カスプ高（厳密, 断面円）
-// h = r_eff - sqrt(r_eff^2 - (ae/2)^2)
-// 逆算
-// ae = 2*sqrt(2*r_eff*h - h^2)
+// h = R - sqrt(R^2 - (ae/2)^2)
+// ae = 2*sqrt(2*R*h - h^2)
+//
+// 参考：切削点直径
+// Dcp = 2R sinθ
 //
 // 推定Ra（参考）
 // Ra ≒ h/4
@@ -22,38 +21,25 @@
         return (deg * Math.PI) / 180.0;
     }
 
-    function calcDeffFromRAndThetaDeg(R_mm, theta_deg) {
-        if (!isFiniteNumber(R_mm) || !isFiniteNumber(theta_deg)) return null;
-        if (R_mm <= 0) return null;
-        if (theta_deg <= 0 || theta_deg >= 90) return null; // 0はDeff=0になるので除外（実務上も危険域）
-        const th = degToRad(theta_deg);
-        const deff = 2 * R_mm * Math.sin(th);
-        if (!(deff > 0)) return null;
-        return deff;
-    }
-
-    // h(mm) from r_eff(mm) and ae(mm)
-    function calcCuspHeightMmFromReffAndAe(reff_mm, ae_mm) {
-        if (!isFiniteNumber(reff_mm) || !isFiniteNumber(ae_mm)) return null;
-        if (reff_mm <= 0 || ae_mm <= 0) return null;
+    function calcScallopHeightMmFromRAndAe(R_mm, ae_mm) {
+        if (!isFiniteNumber(R_mm) || !isFiniteNumber(ae_mm)) return null;
+        if (R_mm <= 0 || ae_mm <= 0) return null;
 
         const half = ae_mm / 2;
-        if (half > reff_mm) return null; // 幾何的に成立しない
+        if (half > R_mm) return null;
 
-        const inside = reff_mm * reff_mm - half * half;
+        const inside = R_mm * R_mm - half * half;
         if (inside < 0) return null;
 
-        const h_mm = reff_mm - Math.sqrt(inside);
-        return h_mm;
+        return R_mm - Math.sqrt(inside);
     }
 
-    // ae(mm) from r_eff(mm) and h(mm)
-    function calcAeFromReffAndHmm(reff_mm, h_mm) {
-        if (!isFiniteNumber(reff_mm) || !isFiniteNumber(h_mm)) return null;
-        if (reff_mm <= 0 || h_mm <= 0) return null;
-        if (h_mm >= 2 * reff_mm) return null;
+    function calcAeFromRAndHmm(R_mm, h_mm) {
+        if (!isFiniteNumber(R_mm) || !isFiniteNumber(h_mm)) return null;
+        if (R_mm <= 0 || h_mm <= 0) return null;
+        if (h_mm >= 2 * R_mm) return null;
 
-        const inside = 2 * reff_mm * h_mm - h_mm * h_mm;
+        const inside = 2 * R_mm * h_mm - h_mm * h_mm;
         if (inside < 0) return null;
 
         return 2 * Math.sqrt(inside);
@@ -65,10 +51,20 @@
         return h_um / 4;
     }
 
+    function calcDcpFromRAndThetaDeg(R_mm, theta_deg) {
+        if (!isFiniteNumber(R_mm) || !isFiniteNumber(theta_deg)) return null;
+        if (R_mm <= 0) return null;
+        if (theta_deg < 0 || theta_deg > 90) return null;
+
+        const th = degToRad(theta_deg);
+        const dcp = 2 * R_mm * Math.sin(th);
+        return dcp;
+    }
+
     global.BallEndSurfaceRoughness = {
-        calcDeffFromRAndThetaDeg,
-        calcCuspHeightMmFromReffAndAe,
-        calcAeFromReffAndHmm,
+        calcScallopHeightMmFromRAndAe,
+        calcAeFromRAndHmm,
         estimateRaFromH,
+        calcDcpFromRAndThetaDeg,
     };
 })(window);
