@@ -1,4 +1,5 @@
 <!-- web/templates/calculators/surface_roughness.html -->
+
 {% extends "base.html" %}
 {% set title = "理論仕上げ面粗さ（h）- 加工条件 電卓" %}
 
@@ -9,22 +10,22 @@
     <div class="grid">
         <label class="field">
             <span>コーナー半径 R（mm）</span>
-            <input id="r_mm" type="number" step="0.001" inputmode="decimal" readonly data-numpad="decimal">
+            <input id="r_mm" value="" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
         <label class="field">
             <span>送り量 f（mm/rev）</span>
-            <input id="f_mmrev" type="number" step="0.001" inputmode="decimal" readonly data-numpad="decimal">
+            <input id="f_mmrev" value="" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
         <label class="field">
             <span>理論粗さ h（µm）</span>
-            <input id="h_um" type="number" step="0.1" inputmode="decimal" readonly data-numpad="decimal">
+            <input id="h_um" value="" readonly data-numpad="decimal" autocomplete="off">
         </label>
 
         <label class="field">
             <span>推定 Ra（µm）※参考</span>
-            <input id="ra_um" type="number" step="0.001" inputmode="decimal" readonly data-numpad="decimal">
+            <input id="ra_um" value="" readonly data-numpad="decimal" autocomplete="off">
         </label>
     </div>
 
