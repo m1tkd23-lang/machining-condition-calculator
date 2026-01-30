@@ -1,4 +1,6 @@
-﻿from __future__ import annotations
+﻿#apps/main.py
+
+from __future__ import annotations
 
 from pathlib import Path
 from flask import Flask, render_template, send_from_directory
@@ -59,6 +61,12 @@ def create_app() -> Flask:
     @app.get("/calc/ball-end-contact-diameter")
     def calc_ball_end_contact_diameter():
         return render_template("calculators/ball_end_contact_diameter.html")
+    
+
+    @app.get("/calc/ball-end-surface-roughness")
+    def calc_ball_end_surface_roughness():
+        return render_template("calculators/ball_end_surface_roughness.html")
+
 
     @app.get("/calc/chip-thinning")
     def calc_chip_thinning():

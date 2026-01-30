@@ -1,0 +1,73 @@
+<!-- web/templates/calculators/ball_end_surface_roughness.html -->
+
+{% extends "base.html" %}
+{% set title = "ボール仕上げ面粗さ（ピックフィード/傾斜）- 加工条件 電卓" %}
+
+{% block content %}
+<section class="card">
+    <h2>ボール仕上げ面粗さ（ピックフィード/傾斜）</h2>
+
+    <div class="grid">
+        <div class="grid-group">
+            <div class="group-title">入力（工具・姿勢）</div>
+
+            <label class="field">
+                <span>ボール半径 R（mm）</span>
+                <input id="r_mm" value="5.00" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>傾斜角 θ（deg）※工具軸と面法線</span>
+                <input id="theta_deg" value="10.0" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>ステップオーバー ae（mm）</span>
+                <input id="ae_mm" value="0.50" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+
+        <div class="grid-group">
+            <div class="group-title">結果（理論値）</div>
+
+            <label class="field">
+                <span>有効径 Deff（mm）</span>
+                <input id="deff_mm" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>理論カスプ高 h（µm）</span>
+                <input id="h_um" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+
+            <label class="field">
+                <span>推定 Ra（µm）※参考</span>
+                <input id="ra_um" value="" readonly data-numpad="decimal" autocomplete="off">
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <button id="btn_calc_h" class="btn">R・θ・ae から h を計算</button>
+        <button id="btn_calc_ae" class="btn">R・θ・h から ae を逆算</button>
+        <button id="btn_calc_ae_from_ra" class="btn">R・θ・Ra から ae を逆算（参考）</button>
+        <a class="btn btn-sub" href="/">トップへ戻る</a>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="note">
+        目的：等高線仕上げ等の「ピックフィード（ステップオーバー）」由来のカスプ高（理論）<br>
+        有効径：Deff = 2R sinθ（θ: 工具軸と面法線のなす角）<br>
+        カスプ高（厳密）：h = r_eff − √(r_eff² − (ae/2)²), r_eff = Deff/2<br>
+        逆算：ae = 2√(2 r_eff h − h²)<br>
+        推定：Ra ≒ h / 4（※参考）<br>
+        ※Raは理論粗さhからの近似推定値です（保証値ではありません）
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/calculators/ball_end_surface_roughness.js"></script>
+<script src="/js/page_ball_end_surface_roughness.js"></script>
+{% endblock %}
